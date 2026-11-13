@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frank Verberne | Automation engineer</title>
+  <meta name="description" content="Portfolio van Frank Verberne: van gedragswetenschapper en productmanager naar automation engineer. Cases met architectuur, lessen en resultaat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- Tokens ---------- */
+    :root {
+      --paper: #F4F6F5;
+      --ink: #18212B;
+      --muted: #5D6873;
+      --track: #2E6B5B;
+      --signal: #D9971A;
+      --rule: #D3D9D6;
+      --node-bg: #FFFFFF;
+      --lesson-bg: #FBF4E6;
+      --display: "Bricolage Grotesque", system-ui, sans-serif;
+      --text: "Instrument Sans", system-ui, sans-serif;
+      --measure: 68ch;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --paper: #10161C;
+        --ink: #E5EAEE;
+        --muted: #9AA5AF;
+        --track: #62B49C;
+        --signal: #F0B23E;
+        --rule: #2A333C;
+        --node-bg: #182029;
+        --lesson-bg: #221D12;
+      }
+    }
+
+    /* ---------- Basis ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 400 1.0625rem/1.6 var(--text);
+    }
+    a { color: var(--track); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+    h1, h2, h3, h4 { font-family: var(--display); line-height: 1.1; margin: 0; }
+    p { margin: 0 0 1em; max-width: var(--measure); }
+    .wrap { width: min(72rem, 100% - 2rem); margin-inline: auto; }
+
+    /* ---------- Kop ---------- */
+    .topbar {
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 0.5rem 1.5rem;
+      padding-block: 1.25rem;
+    }
+    .topbar strong { font-family: var(--display); font-size: 1.1rem; }
+    .topbar nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .topbar nav a { color: var(--ink); text-decoration: none; font-size: 0.95rem; }
+    .topbar nav a:hover { color: var(--track); }
+
+    /* ---------- Intro ---------- */
+    .intro {
+      padding-block: 3rem 2rem;
+      display: grid; grid-template-columns: minmax(0, 1fr) clamp(11rem, 26vw, 18rem);
+      gap: 2rem 3rem; align-items: start;
+    }
+    .portrait {
+      width: 100%; height: auto; aspect-ratio: 1; object-fit: cover;
+      border-radius: 50%; border: 4px solid var(--track); background: #fff;
+      margin-top: 0.75rem;
+    }
+    .intro h1 {
+      font-size: clamp(2.6rem, 8vw, 5.6rem);
+      font-weight: 800;
+      font-variation-settings: "wdth" 75, "opsz" 96;
+      letter-spacing: -0.01em;
+      max-width: 14ch;
+      margin-bottom: 1.5rem;
+    }
+    .intro .lede { font-size: 1.2rem; max-width: 56ch; }
+    .links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; padding: 0; list-style: none; }
+    .links a {
+      display: inline-block; padding: 0.55rem 1rem;
+      border: 1.5px solid var(--track); border-radius: 999px;
+      text-decoration: none; font-weight: 600;
+    }
+    .links a:hover { background: var(--track); color: var(--paper); }
+    .links a.primary { background: var(--track); color: var(--paper); }
+    .links a.primary:hover { background: var(--ink); border-color: var(--ink); }
+
+    /* ---------- Route (tijdlijn in Persoonlijk) ---------- */
+    main h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 1.25rem; }
+    .story .route { margin: 1.25rem 0 0.5rem; }
+    .route {
+      --dot: 1.1rem;
+      position: relative;
+      display: grid; grid-template-columns: repeat(var(--stops, 5), 1fr); gap: 1rem;
+      list-style: none; margin: 0; padding: 0;
+    }
+    .route::before {           /* het spoor */
+      content: ""; position: absolute; left: 0; right: 0;
+      top: calc(var(--dot) / 2 - 2px); height: 4px;
+      background: var(--track); border-radius: 2px;
+      transform-origin: left center;
+      animation: draw 1.4s cubic-bezier(.6,.05,.2,1) both;
+    }
+    .route li { position: relative; padding-top: calc(var(--dot) + 0.9rem); }
+    .route li::before {        /* het station */
+      content: ""; position: absolute; top: 0; left: 0;
+      width: var(--dot); height: var(--dot); border-radius: 50%;
+      background: var(--paper); border: 4px solid var(--track);
+      animation: light 0.4s ease-out both;
+      animation-delay: calc(0.25s + var(--i, 0) * 0.25s);
+    }
+    .route li:last-child::before { background: var(--signal); border-color: var(--signal); }
+    .route .when { display: block; color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+    .route a, .route strong { font-family: var(--display); font-weight: 700; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+    .route a { text-decoration: underline; text-decoration-color: var(--track); text-decoration-thickness: 2px; }
+    .route a:hover { color: var(--track); }
+    .route p { font-size: 0.95rem; color: var(--muted); margin: 0.25rem 0 0; }
+    @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes light { from { background: var(--paper); border-color: var(--rule); } }
+    /* De route staat verderop op de pagina: teken hem pas als hij in beeld scrolt.
+       Browsers zonder scroll-gestuurde animaties spelen hem bij het laden af en tonen hem daarna gewoon. */
+    @supports (animation-timeline: view()) {
+      .route { view-timeline-name: --route; }
+      .route::before { animation-timeline: --route; animation-range: entry 25% cover 50%; }
+      .route li::before {
+        animation-timeline: --route; animation-delay: 0s;
+        animation-range: cover calc(25% + var(--i, 0) * 4%) cover calc(30% + var(--i, 0) * 4%);
+      }
+    }
+
+    /* ---------- Cases ---------- */
+    .section-head { padding-top: 2rem; }
+    .case {
+      display: grid; grid-template-columns: 15rem 1fr; gap: 1rem 3rem;
+      padding-block: 3rem; border-top: 1px solid var(--rule);
+    }
+    .case-meta .when { color: var(--muted); font-variant-numeric: tabular-nums; margin: 0; }
+    .case-meta h3 {
+      font-size: 1.75rem; font-weight: 800; font-variation-settings: "wdth" 85;
+      margin: 0.25rem 0 0.75rem;
+    }
+    .case-meta .stack { color: var(--muted); font-size: 0.9rem; margin: 0; }
+    .case-body h4 { font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.4rem; }
+    .case-body > h4:first-child { margin-top: 0; }
+    .case-body .result { font-weight: 600; }
+
+    /* ---------- Schema per case: van boven naar beneden, met vertakkingen ----------
+       Elke .graph-row is een stap. Tussen twee rijen loopt een horizontale 'bus' op halve hoogte:
+       de bovenste rij tekent lijntjes omlaag naar de bus, de onderste rij takt er met pijltjes van af.
+       Zo ontstaat vanzelf een splitsing (1 naar 3) of samenvoeging (3 naar 1).
+       Een rij met .lanes loopt per kolom 1-op-1 door naar de volgende rij (parallelle banen).
+       --n is het aantal nodes in de rij; daarmee rekent de bus uit waar de eerste en laatste node staan. */
+    .graph { --gap: 1.75rem; display: grid; row-gap: var(--gap); max-width: 40rem; margin: 0.75rem 0 1.5rem; }
+    .graph-row { --n: 1; position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+    .node {
+      position: relative; justify-self: center; align-self: stretch;
+      display: flex; flex-direction: column; justify-content: center; text-align: center;
+      max-width: calc(100% - 0.5rem); padding: 0.4rem 0.75rem;
+      border: 1.5px solid var(--track); border-radius: 0.6rem; background: var(--node-bg);
+      font-size: 0.88rem; line-height: 1.25; hyphens: auto; overflow-wrap: break-word;
+    }
+    .node strong { font-weight: 600; }
+    .node span { color: var(--muted); font-size: 0.8rem; }
+    .node.out { background: var(--track); border-color: var(--track); color: var(--paper); }
+    .node.out span { color: inherit; opacity: 0.85; }
+    /* lijntje omlaag uit een node, en een lijntje met pijlpunt omlaag in een node */
+    .graph-row:not(:last-child) > .node::after,
+    .graph-row:not(:first-child) > .node::before {
+      content: ""; position: absolute; left: 50%; width: 10px; margin-left: -5px;
+      height: calc(var(--gap) / 2 + 1px); background: var(--track);
+    }
+    .graph-row:not(:last-child) > .node::after { top: 100%; clip-path: inset(0 4px); }
+    .graph-row:not(:first-child) > .node::before {
+      bottom: 100%;
+      clip-path: polygon(4px 0, 6px 0, 6px calc(100% - 6px), 10px calc(100% - 6px), 5px 100%, 0 calc(100% - 6px), 4px calc(100% - 6px));
+    }
+    /* de horizontale bus tussen twee rijen, van het midden van de eerste tot het midden van de laatste kolom */
+    .graph-row:not(:last-child)::after,
+    .graph-row:not(:first-child)::before {
+      content: ""; position: absolute; height: 2px; background: var(--track);
+      left: calc(100% / var(--n) / 2); right: calc(100% / var(--n) / 2);
+    }
+    .graph-row:not(:last-child)::after { bottom: calc(var(--gap) / -2 - 1px); }
+    .graph-row:not(:first-child)::before { top: calc(var(--gap) / -2 - 1px); }
+    .graph-row.lanes::after, .graph-row.lanes + .graph-row::before { display: none; }
+    @media (max-width: 560px) { .node { padding: 0.4rem 0.4rem; font-size: 0.84rem; } .node span { font-size: 0.76rem; } }
+
+    .lesson {
+      margin: 1.5rem 0; padding: 1rem 1.25rem;
+      background: var(--lesson-bg); border-left: 4px solid var(--signal);
+      max-width: calc(var(--measure) + 2.5rem);
+    }
+    .lesson h4 { margin-top: 0; }
+    .lesson p:last-child { margin-bottom: 0; }
+
+    /* ---------- Voor jou: open bolletje = kan ik bouwen, dicht = al gebouwd ---------- */
+    .offer, .hobby, .personal { padding-block: 3rem; border-top: 1px solid var(--rule); }
+    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.95rem; }
+    .dot { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 50%; border: 2px solid var(--track); }
+    .legend .dot:nth-of-type(2) { margin-left: 1rem; }
+    .needs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 2.5rem; margin: 1.5rem 0 2.5rem; }
+    @media (min-width: 1000px) { .needs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .needs { grid-template-columns: 1fr; } }
+    .needs h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .dotted { list-style: none; padding: 0; margin: 0; }
+    .dotted li { position: relative; padding-left: 1.4rem; margin-bottom: 0.75rem; font-size: 0.97rem; break-inside: avoid; }
+    .dotted li::before {
+      content: ""; position: absolute; left: 0; top: 0.4em;
+      width: 0.75rem; height: 0.75rem; border-radius: 50%; border: 2px solid var(--track);
+    }
+    .dotted li.done::before, .dot.done { background: var(--track); }
+
+    .sector { background: var(--node-bg); border: 1.5px solid var(--rule); border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 2.5rem; }
+    .sector .dotted { columns: 2 20rem; column-gap: 2.5rem; margin-top: 1.25rem; }
+    .sector h3, .toolbox h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .toolbox { margin-bottom: 2rem; }
+
+    /* ---------- Hobby ---------- */
+    .hobby-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 2rem 3rem; margin-top: 1.5rem; }
+    .hobby-list h3 { font-size: 1.3rem; margin: 0.25rem 0 0.5rem; }
+    .hobby-list .when, .hobby-list .stack { color: var(--muted); font-size: 0.9rem; margin: 0; }
+    .hobby-list .stack { margin-bottom: 0.5rem; }
+
+    /* ---------- Persoonlijk ---------- */
+    .story h3 { font-size: 1.3rem; margin: 2rem 0 0.5rem; }
+    /* Label-waardelijst: één onderwerp per rij, label links, tekst rechts. */
+    .facts { margin: 0; max-width: calc(var(--measure) + 11rem); }
+    .facts > div {
+      display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 0.2rem 1.5rem;
+      padding-block: 0.75rem; border-top: 1px solid var(--rule);
+    }
+    .facts > div:first-child { border-top: 0; padding-top: 0.25rem; }
+    .facts dt { font-family: var(--display); font-weight: 700; }
+    .facts dd { margin: 0; color: var(--muted); }
+    @media (max-width: 560px) { .facts > div { grid-template-columns: 1fr; } }
+
+    /* Tooltip bij afkortingen: de uitleg staat in de HTML (schermlezers lezen hem altijd),
+       en wordt pas zichtbaar bij hover, toetsenbordfocus of een tik op mobiel. */
+    .tip { position: relative; cursor: help; text-decoration: underline dotted; text-underline-offset: 0.2em; }
+    .tip:focus-visible { outline-offset: 2px; }
+    .tip-text {
+      position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip-path: inset(50%); white-space: nowrap;
+    }
+    .tip:hover .tip-text, .tip:focus .tip-text {
+      width: auto; height: auto; overflow: visible; clip-path: none; z-index: 2;
+      left: 50%; bottom: calc(100% + 0.45rem); transform: translateX(-50%);
+      padding: 0.3rem 0.65rem; border-radius: 0.35rem;
+      background: var(--ink); color: var(--paper); font-size: 0.85rem; line-height: 1.3;
+    }
+
+    /* ---------- Werkwijze (echte volgorde, dus genummerd) ---------- */
+    .method { padding-block: 3rem; border-top: 1px solid var(--rule); }
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.5rem 2rem;
+      list-style: none; counter-reset: step; padding: 0; margin: 0;
+    }
+    .steps li { counter-increment: step; }
+    .steps li::before {
+      content: counter(step); display: block;
+      font-family: var(--display); font-weight: 800; font-size: 2.2rem; color: var(--track);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .steps h3 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+    .steps p { font-size: 0.97rem; margin: 0; }
+
+    /* ---------- Stack + contact ---------- */
+    .stack-section, .contact { padding-block: 3rem; border-top: 1px solid var(--rule); }
+    .stack-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.25rem 2rem; margin: 0; }
+    .stack-list dt { font-family: var(--display); font-weight: 700; }
+    .stack-list dd { margin: 0.2rem 0 0; color: var(--muted); }
+    footer { padding-block: 2rem 3rem; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--rule); }
+
+    /* ---------- Mobiel ---------- */
+    @media (max-width: 760px) {
+      .intro { grid-template-columns: 1fr; padding-top: 1.5rem; }
+      .portrait { order: -1; width: 8.5rem; margin-top: 0; }
+      .case { grid-template-columns: 1fr; padding-block: 2.25rem; }
+    }
+    /* Zes stations passen pas naast elkaar vanaf ~1000px; daaronder loopt het spoor verticaal. */
+    @media (max-width: 1000px) {
+      .route { grid-template-columns: 1fr; gap: 1.25rem; padding-left: 2rem; }
+      .route::before {
+        left: calc(var(--dot) / 2 - 2px); right: auto; top: 0; bottom: 0;
+        width: 4px; height: auto; transform-origin: center top;
+        animation-name: draw-down;
+      }
+      .route li { padding-top: 0; }
+      .route li::before { left: -2rem; top: 0.2rem; }
+    }
+    @keyframes draw-down { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap topbar">
+    <strong>Frank Verberne</strong>
+    <nav aria-label="Hoofdmenu">
+      <a href="#cases">Werk</a>
+      <a href="#voor-jou">Voor jou</a>
+      <a href="#hobby">Hobby</a>
+      <a href="#persoonlijk">Persoonlijk</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap intro">
+      <div class="intro-text">
+        <h1>Sociale nerd die processen automatiseert</h1>
+        <p class="lede">Ik ben Frank Verberne. Ik promoveerde op de interactie tussen mens en technologie, werkte als coach en trainer en stuurde als productmanager UX-designers en developers aan. Sinds eind 2024 bouw ik zelf: automatiseringen die terugkerend handwerk overnemen, zodat er tijd vrijkomt voor werk dat ertoe doet.</p>
+        <p>Hieronder staat wat ik bouwde, wat ik onderweg leerde en wat ik voor jouw organisatie kan automatiseren.</p>
+        <ul class="links">
+          <li><a class="primary" href="#voor-jou">Wat kan ik voor jou automatiseren?</a></li>
+          <li><a href="https://www.linkedin.com/in/drfrankverberne">LinkedIn</a></li>
+          <li><a href="mailto:frankverberne@gmail.com">E-mail</a></li>
+        </ul>
+      </div>
+      <img class="portrait" src="frank.jpg" alt="Portretfoto van Frank Verberne" width="600" height="600">
+    </section>
+
+    <section class="wrap" id="cases" aria-labelledby="cases-title">
+      <div class="section-head">
+        <h2 id="cases-title">Professioneel werk</h2>
+        <p>Gebouwd in mijn werk als Business Process Automation Engineer, sinds eind 2024.</p>
+      </div>
+      <article class="case" id="verloning" aria-labelledby="verloning-title">
+        <div class="case-meta">
+          <p class="when">2025 – 2026</p>
+          <h3 id="verloning-title">Verloning die zichzelf klaarzet</h3>
+          <p class="stack">Python, Selenium, PyQt5, Google Apps Script, Make.com, Employes, Google Drive</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Elke maand moesten reiskosten, thuiswerkdagen, verlof en ziekte per medewerker in de loonstroken komen. De gegevens zaten verspreid over NS Zakelijk, Employes en spreadsheets. En NS heeft geen API.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: NS-reisdata via een Python-app, woon-werkdeclaraties via een tweede app en verlof en ziekte uit Employes komen samen in Apps Script. Make.com zet daarna de conceptloonstroken klaar in Employes.">
+            <div class="graph-row" style="--n:3">
+              <div class="node"><strong>NS&#8209;reisdata</strong><span>Python-app en Drive</span></div>
+              <div class="node"><strong>Woon-werk</strong><span>eigen declaratie-app</span></div>
+              <div class="node"><strong>Verlof en ziekte</strong><span>uit Employes</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Apps Script</strong><span>reiskosten, thuiswerkdagen, mobiliteitsbudget</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Make.com</strong><span>regisseert en zet klaar</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node out"><strong>Conceptloonstroken</strong><span>in Employes, alleen nog goedkeuren</span></div>
+            </div>
+          </figure>
+          <p>Een Python-desktopapp logt in op NS Zakelijk, downloadt per abonnement de reistransacties en zet ze in Google Drive. Een tweede app dient woon-werkdeclaraties voor meerdere dagen tegelijk in bij Employes. Make.com regisseert de rest: het haalt medewerkers, verlof en ziekte uit Employes en roept mijn Apps Script aan. Dat script maakt een tabblad voor elke nieuwe medewerker, koppelt NS-kosten via het kaartnummer aan de juiste persoon en rekent reiskosten, thuiswerkdagen en het resterende mobiliteitsbudget uit. Daarna zet Make de conceptloonstroken klaar in Employes.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>Kalenders zijn lastiger dan ze lijken. De feestdagen komen uit een publieke Google-agenda, maar niet elke feestdag is een vrije dag: Goede Vrijdag en Bevrijdingsdag moest ik uitzonderen. Declaraties komen soms laat binnen, dus het script wacht per bron een paar dagen en stempelt verwerkte dagen met de maand. Zo telt niets dubbel.</p>
+            <p>En waar een mens nodig is, laat ik een mens het doen. Vraagt NS om een CAPTCHA, dan wacht de app tot iemand hem oplost.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">De conceptloonstroken staan elke maand klaar in Employes en hoeven alleen nog goedgekeurd te worden. Ook de jaarovergang gaat vanzelf: back-up, nieuw jaar, nieuwe feestdagen.</p>
+        </div>
+      </article>
+
+      <article class="case" id="podcast" aria-labelledby="podcast-title">
+        <div class="case-meta">
+          <p class="when">2026</p>
+          <h3 id="podcast-title">Een podcast die op tijd online staat</h3>
+          <p class="stack">Python, GitHub Actions, Notion API, YouTube API, LinkedIn API, Slack, Claude</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Een nieuwe aflevering betekent: de video openbaar zetten op YouTube, LinkedIn-posts plaatsen en in Slack laten weten dat hij live staat. Op de juiste dag en in de juiste volgorde.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: Claude maakt lokaal concepten, de planning staat in Notion en de scheduler zet de video openbaar op YouTube, plaatst de LinkedIn-posts en kondigt de aflevering aan in Slack.">
+            <div class="graph-row">
+              <div class="node"><strong>Concepten met Claude</strong><span>lokaal, video privé klaar</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Planning in Notion</strong><span>status Scheduled</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Scheduler</strong><span>09:07, reserve 14:07</span></div>
+            </div>
+            <div class="graph-row" style="--n:3">
+              <div class="node out"><strong>YouTube</strong><span>video openbaar</span></div>
+              <div class="node out"><strong>LinkedIn</strong><span>zodra de video live is</span></div>
+              <div class="node out"><strong>Slack</strong><span>aankondiging</span></div>
+            </div>
+          </figure>
+          <p>In Notion staat wat er wanneer uitgaat. Een lokale stap maakt met Claude concepten voor de posts en zet de video privé klaar. Op de publicatiedag zet de scheduler de video openbaar, plaatst de LinkedIn-posts zodra hun video's openbaar zijn en kondigt de aflevering aan in Slack. Die laatste stap deed eerst Make.com.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>Een geplande taak die niet draait, valt niemand op. De planner van GitHub sloeg ongeveer de helft van de runs over. Daarom haalt de scheduler een gemiste dag alsnog in, met een vinkje in Notion als rem tegen dubbel posten. Een verlopen LinkedIn-token geeft nu een luide fout, en zeven dagen van tevoren een waarschuwing.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">De scheduler draait om 09:07 en als reserve om 14:07, met 67 tests als vangnet. Spotify heeft geen API om op een tijdstip te publiceren, dus dat blijft bewust handwerk.</p>
+        </div>
+      </article>
+
+      <article class="case" id="reminders" aria-labelledby="reminders-title">
+        <div class="case-meta">
+          <p class="when">2026</p>
+          <h3 id="reminders-title">Reminders zonder server</h3>
+          <p class="stack">Node 22 zonder dependencies, GitHub Actions, Notion API, Slack API</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Twee Google Apps Scripts herinnerden collega's aan contacten die opvolging nodig hadden en aan verjaardagen. Eén ervan werd via Make.com aangeroepen.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: Notion voedt twee scripts. De contactreminder stuurt elke werkdag een Slack-DM of Notion-taak, de verjaardagsreminder elke ochtend een Slack-bericht.">
+            <div class="graph-row">
+              <div class="node"><strong>Notion</strong><span>contacten en medewerkers</span></div>
+            </div>
+            <div class="graph-row lanes" style="--n:2">
+              <div class="node"><strong>Contactreminder</strong><span>elke werkdag</span></div>
+              <div class="node"><strong>Verjaardagsreminder</strong><span>elke ochtend</span></div>
+            </div>
+            <div class="graph-row" style="--n:2">
+              <div class="node out"><strong>Slack-DM of Notion-taak</strong><span>per contacteigenaar</span></div>
+              <div class="node out"><strong>Slack-bericht</strong><span>vandaag en over 14 dagen</span></div>
+            </div>
+          </figure>
+          <p>Ik herschreef beide als kleine Node-programma's zonder dependencies. Ze hebben een dry-run, en bij de contactreminder kun je een andere datum simuleren om te zien wat er die dag verstuurd zou worden. Mislukt één ontvanger, dan gaat de rest gewoon door. De verjaardagsreminder houdt rekening met 29 februari, en wie zijn leeftijd liever niet deelt, kan dat uitzetten.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>Bij het uitschrijven van de spec vond ik vier bugs in het oude script, waaronder een datumfout door UTC. Daarna bleek dat GitHub geplande runs 39 tot 59 minuten te laat startte. Mijn conclusie staat in een commit: een uur verschuiving is een kleiner probleem dan een dag die stil wordt overgeslagen.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">70 en 29 tests. Het Make-scenario is uitgezet en gearchiveerd.</p>
+        </div>
+      </article>
+
+      <article class="case" id="planning" aria-labelledby="planning-title">
+        <div class="case-meta">
+          <p class="when">2025 – 2026</p>
+          <h3 id="planning-title">Geplande taken die echt op tijd draaien</h3>
+          <p class="stack">Kubernetes CronJobs, Helm, GitHub Actions, Python, Notion API</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Mijn automatiseringen draaiden op de planner van GitHub Actions. Die start runs te laat of slaat ze over, en dat merk je pas als een reminder of publicatie uitblijft.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: één Helm-chart met Kubernetes CronJobs start via de GitHub API de workflows van de reminders, de podcast en de marge-update.">
+            <div class="graph-row">
+              <div class="node"><strong>Helm-chart</strong><span>alle schema's op één plek</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Kubernetes CronJobs</strong><span>tijden in Europe/Amsterdam</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>GitHub API</strong><span>start de workflow</span></div>
+            </div>
+            <div class="graph-row" style="--n:3">
+              <div class="node out"><strong>Reminders</strong><span>dagelijks</span></div>
+              <div class="node out"><strong>Podcast</strong><span>twee keer per dag</span></div>
+              <div class="node out"><strong>Marge-update</strong><span>maandelijks</span></div>
+            </div>
+          </figure>
+          <p>Eén Helm-chart bevat alle schema's, van de dagelijkse reminders en de podcastpublicatie tot de maandelijkse marge-update. Elke CronJob start de workflow via de GitHub API. Dezelfde job kan niet twee keer tegelijk draaien, een mislukte start wordt twee keer opnieuw geprobeerd, en alle tijden staan in Europe/Amsterdam. Zomertijd is daarmee geen probleem meer.</p>
+          <p>De marge-update haalt elke maand per medewerker de billable uren van vier maanden op en zet maand- en jaarmarges in Notion. Historische tarieven blijven bewaard, en aanroepen naar Notion krijgen bij een fout een retry met exponentiële backoff.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>De zomertijdcontroles en uurchecks in mijn workflows waren lapmiddelen voor een onbetrouwbare planner. Eén plek met betrouwbare planning maakte ze overbodig.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">Acht geplande jobs uit zes repo's starten nu vanuit één chart.</p>
+        </div>
+      </article>
+
+      <article class="case" id="moneybird" aria-labelledby="moneybird-title">
+        <div class="case-meta">
+          <p class="when">2026, in aanbouw</p>
+          <h3 id="moneybird-title">Uren uit Moneybird, direct in Notion</h3>
+          <p class="stack">Python, Docker, Kubernetes, Helm, Moneybird-webhooks, Notion API</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Urenregistraties en de status van facturen uit Moneybird moeten in de urendatabase in Notion staan. Dat deden twee Make.com-scenario's.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: Moneybird stuurt bij elke wijziging een webhook en een nachtelijke sync vangt gemiste wijzigingen op. Beide komen samen in een idempotente verwerking die de urendatabase in Notion bijwerkt.">
+            <div class="graph-row">
+              <div class="node"><strong>Moneybird</strong><span>uren en facturen</span></div>
+            </div>
+            <div class="graph-row" style="--n:2">
+              <div class="node"><strong>Webhook</strong><span>direct, met HMAC-check</span></div>
+              <div class="node"><strong>Nachtelijke sync</strong><span>vangnet: laatste 7 dagen</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Idempotente verwerking</strong><span>dubbel verwerken kan geen kwaad</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node out"><strong>Urendatabase in Notion</strong></div>
+            </div>
+          </figure>
+          <p>Een kleine Python-service ontvangt de webhooks, controleert de HMAC-handtekening (met een venster van vijf minuten tegen replay) en werkt Notion bij. Elke nacht haalt een sync de laatste zeven dagen opnieuw op, voor het geval er een webhook gemist is. De service draait als container op Kubernetes. Alleen het webhookpad is van buitenaf bereikbaar.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>Het eerste ontwerp had een eigen database om dubbele berichten te herkennen. Ik koos voor iets eenvoudigers: elke verwerking is idempotent, dus een bericht twee keer verwerken geeft hetzelfde resultaat. De nachtelijke sync vangt de rest op. Minder onderdelen betekent minder dat stuk kan gaan.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">18 tests. De volgende stap is live zetten en daarna de Make-scenario's uitzetten.</p>
+        </div>
+      </article>
+
+      <article class="case" id="contacten" aria-labelledby="contacten-title">
+        <div class="case-meta">
+          <p class="when">2026, in aanbouw</p>
+          <h3 id="contacten-title">Contacten die niet heen en weer blijven stuiteren</h3>
+          <p class="stack">TypeScript, Fastify, Google People API, Notion API, vitest, Docker</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Het team houdt contacten bij in een CRM in Notion, maar wil ze ook op de telefoon en in Gmail hebben. Synchroniseren in twee richtingen klinkt simpel, tot twee systemen elkaars wijzigingen eindeloos terugschrijven.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: teamleden kiezen contacten in het CRM in Notion. De sync vergelijkt per contact met een baseline en schrijft alleen echte wijzigingen, beide kanten op, naar Google Contacts, met een rapport in Slack.">
+            <div class="graph-row">
+              <div class="node"><strong>CRM in Notion</strong><span>opt-in per teamlid</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Vergelijking met baseline</strong><span>per contact, per veld, beide kanten op</span></div>
+            </div>
+            <div class="graph-row" style="--n:2">
+              <div class="node out"><strong>Google Contacts</strong><span>alleen echte wijzigingen</span></div>
+              <div class="node out"><strong>Rapport in Slack</strong><span>wat er veranderde</span></div>
+            </div>
+          </figure>
+          <p>Teamleden kiezen in Notion welke contacten ze willen hebben. Per contact vergelijkt de sync Notion en alle Google-kopieën met een opgeslagen baseline, en schrijft alleen de velden die echt veranderd zijn. Telefoonnummers worden genormaliseerd, zodat '06-' en '+31 6' niet als wijziging tellen.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>De eerste versie schreef bij elke run zes wijzigingen per gebruiker die er niet waren: echo's van zijn eigen schrijfacties. Ik bouwde de engine om naar een vergelijking per contact, en een integratietest bewijst nu dat een run zonder wijzigingen niets schrijft. Een geplande droogloop faalt bovendien bewust, want een groene run die niets doet, is een stille fout.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">288 tests in 12 bestanden. Live gaan wacht nog op een beheerdersinstelling bij Google (domain-wide delegation).</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="wrap offer" id="voor-jou" aria-labelledby="offer-title">
+      <h2 id="offer-title">Wat kan ik voor jou automatiseren?</h2>
+      <p>Deze cases bouwde ik voor één organisatie, maar hetzelfde soort werk zit in elk bedrijf: taken die elke dag, week of maand terugkomen en samen uren kosten. Vaak doet een MT-lid of de eigenaar ze zelf, omdat het er "even bij" moet. Hieronder staan voorbeelden van wat zich goed laat automatiseren. Waar ik het al bouwde, staat de case erbij.</p>
+      <p class="legend"><span class="dot done" aria-hidden="true"></span> al gebouwd <span class="dot" aria-hidden="true"></span> kan ik voor je bouwen</p>
+      <div class="needs">
+        <div>
+          <h3>Elke dag</h3>
+          <ul class="dotted">
+            <li class="done">Klanten en leads opvolgen: wie moet vandaag gebeld of gemaild worden? <a href="#reminders">Zo deed ik het</a></li>
+            <li class="done">Gegevens overtypen tussen systemen, zoals uren, facturen en contacten. <a href="#moneybird">Zo deed ik het</a></li>
+            <li>Nieuwe leads uit de website, formulieren of LinkedIn direct in het CRM, met een melding aan de juiste collega.</li>
+            <li>De inbox en aanvraagformulieren sorteren: AI leest mee, labelt en zet een conceptantwoord klaar.</li>
+            <li>Veelgestelde vragen van klanten beantwoorden met een AI-assistent die je eigen kennisbank gebruikt. Een mens keurt het antwoord.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Elke week</h3>
+          <ul class="dotted">
+            <li class="done">Content en aankondigingen op tijd publiceren. <a href="#podcast">Zo deed ik het</a></li>
+            <li>Een weekoverzicht voor het MT met omzet, pijplijn en bezetting, elke maandagochtend klaar.</li>
+            <li>Controleren wie zijn uren nog niet heeft geschreven, met een herinnering aan die mensen.</li>
+            <li>Notulen samenvatten en actiepunten met AI als taken in je projectsysteem zetten.</li>
+            <li>De planning bewaken: wie werkt waar, en waar dreigt volgende week een gat?</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Elke maand</h3>
+          <ul class="dotted">
+            <li class="done">De verloning voorbereiden: reiskosten, thuiswerkdagen, verlof en ziekte. <a href="#verloning">Zo deed ik het</a></li>
+            <li class="done">Marge en bezetting per medewerker berekenen. <a href="#planning">Zo deed ik het</a></li>
+            <li>Facturen maken uit geregistreerde uren of vaste maandbedragen.</li>
+            <li>Bonnetjes en inkoopfacturen uit de mail halen en klaarzetten voor de boekhouding.</li>
+            <li>Herinneringen sturen voor openstaande facturen.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Bij elke nieuwe medewerker of klant</h3>
+          <ul class="dotted">
+            <li>On- en offboarding: accounts, toegang, contract en checklist in één keer geregeld.</li>
+            <li>Een nieuwe klant tegelijk aanmaken in CRM, boekhouding en projectmap.</li>
+            <li>Een offerte opbouwen uit de notities van een intake, met AI als eerste schrijver.</li>
+            <li>Contracten vullen vanuit een sjabloon en digitaal laten ondertekenen.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sector">
+        <h3>Voorbeeld: een marketingbureau voor franchiseketens</h3>
+        <p>Eén merk, tientallen vestigingen, en per vestiging steeds dezelfde handelingen. Juist daar levert automatiseren veel op. Zo zou ik het aanpakken:</p>
+        <ul class="dotted">
+          <li>Maandrapportage per vestiging: cijfers uit Google Ads, Google Business Profile en Search Console automatisch verzameld, met een AI-samenvatting als startpunt voor het maandgesprek.</li>
+          <li>Een nieuwe vestiging in één keer live: vanuit één formulier de campagne uit een sjabloon, het dashboard, de mappen en de takenlijst aanmaken.</li>
+          <li>Lokale varianten van landelijke campagnes: AI schrijft per vestiging teksten met plaatsnaam en lokaal aanbod, binnen de merkrichtlijnen, klaar voor een laatste check.</li>
+          <li>Reviews en vestigingsgegevens bewaken: een melding bij elke nieuwe review met een conceptreactie, en een check of adressen en openingstijden overal kloppen.</li>
+          <li>Mediabudget per vestiging bewaken: een waarschuwing als een vestiging te snel of te langzaam door het budget gaat.</li>
+          <li>Werving van franchisenemers: aanmeldingen automatisch naast het kandidaatprofiel leggen, met een eerste matchscore en een samenvatting voor het gesprek.</li>
+          <li>Facturatie per vestiging: vaste maandbedragen automatisch gefactureerd, ook als er vestigingen bijkomen of stoppen.</li>
+        </ul>
+      </div>
+
+      <div class="toolbox">
+        <h3>Code of low-code: wat het probleem nodig heeft</h3>
+        <p>Ik bouw in code, vooral Python en TypeScript, en in low-code tools als Make.com en Zapier. Met n8n heb ik nog niet officieel gewerkt, maar het werkt volgens hetzelfde principe en ik pak het op als jouw organisatie het gebruikt. Een eenvoudige koppeling staat in low-code vaak sneller. Wordt het complexer, moet het getest worden of gaat er veel data doorheen, dan kies ik code.</p>
+        <p>Vraagt een probleem om een taal of tool die ik nog niet ken, dan leer ik die. Zo leerde ik Lua om <a href="#hobby">Tabletop Simulator te scripten</a>.</p>
+      </div>
+
+      <p>Dit is maar een greep. Herken je iets, of loop je tegen iets anders aan?</p>
+      <ul class="links">
+        <li><a class="primary" href="mailto:frankverberne@gmail.com?subject=Automatiseren%20bij%20ons">Laten we kijken wat bij jou kan</a></li>
+      </ul>
+    </section>
+
+    <section class="wrap method" id="werkwijze" aria-labelledby="method-title">
+      <h2 id="method-title" class="section-title">Hoe ik werk</h2>
+      <p>Ik bouw met Claude Code als pair programmer. Ik bepaal wat er moet gebeuren en waarom, de AI helpt bij het hoe, en tests controleren het resultaat. Dat werkt alleen met een vaste volgorde.</p>
+      <ol class="steps">
+        <li>
+          <h3>Het proces begrijpen</h3>
+          <p>Ik begin bij de mensen die het werk doen: wat kost tijd en waar gaat het mis? Dat leerde ik als productmanager.</p>
+        </li>
+        <li>
+          <h3>Eerst een spec</h3>
+          <p>Een korte spec beschrijft wat het moet doen en wat nooit mag gebeuren. Bij de contactreminder vond ik zo vier bugs in het oude script, nog voor er nieuwe code was.</p>
+        </li>
+        <li>
+          <h3>Testen en droogdraaien</h3>
+          <p>Elke integratie heeft tests en een dry-run. Een oud Make-scenario gaat pas uit als het nieuwe aantoonbaar hetzelfde doet.</p>
+        </li>
+        <li>
+          <h3>Luid falen</h3>
+          <p>Een stille fout is erger dan een luide. Een verlopen token of een overgeslagen run moet meteen opvallen, niet pas weken later.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="wrap hobby" id="hobby" aria-labelledby="hobby-title">
+      <h2 id="hobby-title">Hobbyprojecten</h2>
+      <p>In mijn vrije tijd script ik voor Tabletop Simulator, een digitale speeltafel voor bord- en kaartspellen. Ik schrijf de tools zo dat andere spelers ze ook kunnen gebruiken, en de code is openbaar.</p>
+      <div class="hobby-list">
+        <article>
+          <p class="when">2024 – 2025</p>
+          <h3>Munchkin Complete Collection</h3>
+          <p>Lua-scripts voor een complete versie van het kaartspel Munchkin in Tabletop Simulator. Ze rekenen per speler de totale gevechtskracht uit en sturen dobbelstenen, tokens en side quests aan. Een Python-script ruimt de oude assetbestanden van eerdere versies op.</p>
+          <p class="stack">Lua, Python</p>
+          <a href="https://github.com/FVMF/TTS_munchkin">Code op GitHub</a>
+        </article>
+        <article>
+          <p class="when">2024 – 2025</p>
+          <h3>Kapotte links in speelbestanden repareren</h3>
+          <p>Gaat een server met afbeeldingen of modellen offline, dan werkt een gedeeld spel niet meer voor anderen. Dit script vervangt dode links in een opgeslagen spel door de bestanden die je lokaal nog hebt, en maakt eerst een back-up. Daarna upload je alles opnieuw naar de Steam Cloud. Getest op Windows 11, Ubuntu en macOS.</p>
+          <p class="stack">Python</p>
+          <a href="https://github.com/FVMF/TTS_steam_links">Code op GitHub</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap personal" id="persoonlijk" aria-labelledby="personal-title">
+      <h2 id="personal-title">Persoonlijk</h2>
+      <div class="story">
+        <p>Ik ben een sociale nerd: gefascineerd door menselijk gedrag, en net zo blij met een goed stuk code. Mijn overtuiging is simpel: technologie is pas echt innovatief als ze ruimte maakt voor menselijk talent. Mijn kwispelmodus gaat aan zodra ik een inefficiënt of ingewikkeld proces mag doorgronden, vereenvoudigen en automatiseren. Het mooiste resultaat is vrijgespeelde tijd, ons meest kostbare bezit.</p>
+
+        <h3 id="route-title">Mijn route</h3>
+        <ol class="route" id="route" style="--stops:6" aria-labelledby="route-title">
+          <li style="--i:0">
+            <span class="when">2003 – 2009</span>
+            <a href="#hoe-ik-hier-kwam">Psychologie in Nijmegen</a>
+            <p>Sociale psychologie, met programmeercursussen ernaast. Afgestudeerd op immersive virtual environments.</p>
+          </li>
+          <li style="--i:1">
+            <span class="when">2010 – 2015</span>
+            <strong>Promotie aan de TU/e</strong>
+            <p>Onderzoek naar vertrouwen in zelfrijdende auto's, met avatars en een rijsimulator. Experimenten gebouwd in Authorware en Python.</p>
+          </li>
+          <li style="--i:2">
+            <span class="when">2016 – 2020</span>
+            <strong>Coach en trainer</strong>
+            <p>Eigen bedrijf in coaching en training. Schreef een boek en automatiseerde de matches voor speeddates op de Dutch Comic Con.</p>
+          </li>
+          <li style="--i:3">
+            <span class="when">2021 – 2024</span>
+            <strong>Productmanager bij Code Yellow</strong>
+            <p>Technische kant, klantcontact, testen en het developmentteam aansturen.</p>
+          </li>
+          <li style="--i:4">
+            <span class="when">2025</span>
+            <a href="#verloning">Eerste eigen tools</a>
+            <p>Python-apps voor uren, declaraties en NS-reisdata. Daarna de verloningsketen met Apps Script en Make.com.</p>
+          </li>
+          <li style="--i:5">
+            <span class="when">2026</span>
+            <a href="#podcast">Geteste integraties</a>
+            <p>Code met tests en dry-runs, gepland op Kubernetes, gebouwd met Claude als pair programmer.</p>
+          </li>
+        </ol>
+
+        <h3 id="hoe-ik-hier-kwam">Hoe ik hier kwam</h3>
+        <p>Waarom doen mensen wat ze doen? Die vraag bracht me naar de opleiding psychologie in Nijmegen, waar ik me specialiseerde in sociale psychologie. Daarnaast was ik nieuwsgierig naar hoe je computers kunt laten doen wat jij wilt, dus volgde ik naast de psychologievakken ook programmeercursussen. In de research master Behavioural Science kwamen mijn interesse in menselijk gedrag en technologie samen. Voor mijn afstudeerproject heb ik virtuele omgevingen geprogrammeerd om menselijk gedrag te meten in een toentertijd gloednieuw virtual reality lab.</p>
+        <p>Tijdens mijn promotie in Human-Technology Interaction aan de Technische Universiteit Eindhoven onderzocht ik hoe ik mensen meer vertrouwen kon geven in een zelfrijdende auto, waarbij ik avatars en een rijsimulator heb ingezet. De experimenten bouwde ik zelf, in Authorware en vooral veel Python.</p>
+        <p>Daarna ging ik de menselijke kant op: als zelfstandige coach en trainer werkte ik direct met mensen, al automatiseerde ik toen ook de matches voor de speeddates die ik organiseerde op de Dutch Comic Con. Bij Code Yellow kwam alles samen: ik zat aan de technische kant, had het klantcontact, testte nieuwe features (en maakte ze stuk) en stuurde het developmentteam aan.</p>
+
+        <h3>Hoe ik met AI werk</h3>
+        <p>Die vaardigheden gebruik ik nu elke dag. Een AI-assistent als Claude, ChatGPT of Gemini aansturen lijkt sterk op een developmentteam aansturen: een heldere opdracht geven, het resultaat kritisch testen en bijsturen tot alle details kloppen. Mijn testmentaliteit en oog voor detail zijn daarbij net zo belangrijk als de code zelf.</p>
+        <p>Ik ben geen vibe coder. Ik lees en begrijp code ook zonder AI. Wel gebruik ik AI om sneller te werken en nieuwe dingen snel op te zetten, met als voorwaarde dat ze stabiel draaien: met tests, dry-runs en een mens die snapt wat er gebeurt.</p>
+        <p>In een professionele samenwerking zijn eerlijkheid, duidelijkheid en open communicatie voor mij de standaard. Humor en diepgang horen daar vanzelfsprekend bij.</p>
+
+        <h3>In het dagelijks leven</h3>
+        <dl class="facts">
+          <div><dt>Bouwjaar</dt><dd>1984. Goed jaar, al zeg ik het zelf.</dd></div>
+          <div><dt>Thuis</dt><dd>Getrouwd met Aris Bartholomeus. Samen hebben we een <abbr class="tip" tabindex="0">DINK<span class="tip-text" role="tooltip">double income, no kids</span></abbr>-lifestyle in Westerhoven met schoonouders in de achtertuin. Dat verhaal vertel ik graag face-to-face.</dd></div>
+          <div><dt>Vrije tijd</dt><dd>Bordspelfanaat: er is een heuse gameroom in de maak, want de collectie blijft groeien. Verder 3D-printen, escape rooms, cabaret en (muziek)theater, gamen op pc, PS5, Switch en VR, reizen, persoonlijke ontwikkeling en <a href="#hobby">scripten voor Tabletop Simulator</a>.</dd></div>
+          <div><dt>Beschikbaar</dt><dd>Alles wat MT kon bedenken is inmiddels geautomatiseerd en draait als een tiet. Kortom: ik heb mezelf weggeautomatiseerd. Zo goed ben ik.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="wrap stack-section" id="stack" aria-labelledby="stack-title">
+      <h2 id="stack-title">Stack</h2>
+      <dl class="stack-list">
+        <div><dt>Talen</dt><dd>Python, TypeScript, JavaScript (Node), Google Apps Script, SQL. En Lua, voor mijn <a href="#hobby">hobbyprojecten</a>.</dd></div>
+        <div><dt>Integraties</dt><dd>REST API's en webhooks van Notion, Slack, Moneybird, Employes, Google Workspace, YouTube en LinkedIn.</dd></div>
+        <div><dt>Platform</dt><dd>GitHub Actions, Docker, Kubernetes met Helm.</dd></div>
+        <div><dt>Low-code</dt><dd>Make.com en Zapier.</dd></div>
+        <div><dt>Kwaliteit</dt><dd>vitest, node --test, Python-tests, dry-runs, conventional commits.</dd></div>
+        <div><dt>Desktop en browser</dt><dd>PyQt5, Selenium, PyInstaller.</dd></div>
+        <div><dt>AI</dt><dd>Slimme assistenten zoals Claude, ChatGPT en Gemini.</dd></div>      </dl>
+    </section>
+
+    <section class="wrap contact" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <p>Wil je praten over automatisering of AI? Stuur me een bericht.</p>
+      <ul class="links">
+        <li><a href="mailto:frankverberne@gmail.com">frankverberne@gmail.com</a></li>
+        <li><a href="https://www.linkedin.com/in/drfrankverberne">LinkedIn</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>Deze site is één HTML-bestand, gehost op GitHub Pages.</p>
+  </footer>
+</body>
+</html>
