@@ -1,6 +1,8 @@
 # Portfolio Frank Verberne
 
-Persoonlijke portfoliosite, gehost op GitHub Pages. Eén `index.html` met inline CSS: geen build, geen dependencies.
+Live op **https://frankautomatiseert.nl**, gehost op GitHub Pages vanuit deze repo (`FVMF/portfolio`, branch `main`).
+
+Eén `index.html` met inline CSS: geen build, geen dependencies, geen JavaScript.
 
 ## Lokaal bekijken
 
@@ -10,66 +12,53 @@ python3 -m http.server 8123
 
 Open daarna http://localhost:8123 in je browser. Stoppen doe je met `Ctrl+C`.
 
-## Eerste keer publiceren
-
-Vervang `<account>` door je GitHub-gebruikersnaam in kleine letters, bijvoorbeeld `fvmf`. De repo moet precies `<account>.github.io` heten. Dan staat de site op `https://<account>.github.io`.
-
-1. Log in met het juiste account:
-
-   ```bash
-   gh auth login
-   ```
-
-   Kies GitHub.com, HTTPS en "Login with a web browser". Heb je meerdere accounts, wissel dan met `gh auth switch --user <account>`. Met `gh auth status` zie je welk account actief is.
-
-2. Maak van deze map een git-repo en doe de eerste commit:
-
-   ```bash
-   git init -b main
-   git add index.html frank.jpg README.md .nojekyll
-   git commit -m "feat: eerste versie portfolio"
-   ```
-
-3. Maak de repo op GitHub en push in één stap:
-
-   ```bash
-   gh repo create <account>.github.io --public --source=. --push
-   ```
-
-4. Controleer of Pages aanstaat:
-
-   ```bash
-   gh api repos/<account>/<account>.github.io/pages -q .html_url
-   ```
-
-   Krijg je een 404, zet Pages dan aan:
-
-   ```bash
-   gh api -X POST repos/<account>/<account>.github.io/pages -f "source[branch]=main" -f "source[path]=/"
-   ```
-
-   Via de website kan het ook: Settings, Pages, "Deploy from a branch", branch `main`, map `/ (root)`.
-
-5. Na een à twee minuten staat de site online. De status van de laatste build zie je met:
-
-   ```bash
-   gh api repos/<account>/<account>.github.io/pages/builds/latest -q .status
-   ```
-
 ## Een wijziging publiceren
 
+Git logt in via `gh`, met het account dat daar actief is. Zet dus eerst FVMF actief en daarna weer terug:
+
 ```bash
+gh auth switch --user FVMF
 git add index.html
 git commit -m "feat(cases): voeg case X toe"
 git push
+gh auth switch --user Verandert-Gewoon
 ```
 
-GitHub Pages zet de nieuwe versie binnen ongeveer een minuut online.
+GitHub Pages zet de nieuwe versie binnen ongeveer een minuut online. Browsers kunnen de oude versie nog tot 10 minuten tonen; ververs dan de pagina.
 
 ## Een case toevoegen
 
-Kopieer in `index.html` een volledig `<article class="case">`-blok, geef het een nieuw `id` en vul Probleem, Wat ik bouwde, Wat ik leerde en Resultaat in. Elke `<li>` in `<ol class="flow">` is een knooppunt in het schema. Wil je de case vanuit "Mijn route" laten aanklikken, verwijs dan met `href="#jouw-id"`.
+Kopieer in `index.html` een volledig `<article class="case">`-blok, geef het een nieuw `id` en vul Probleem, Wat ik bouwde, Wat ik leerde en Resultaat in.
+
+Het schema per case bestaat uit rijen (`.graph-row`) met nodes (`.node`):
+
+```html
+<div class="graph-row" style="--n:2">
+  <div class="node"><strong>Titel</strong><span>toelichting</span></div>
+  <div class="node out"><strong>Eindresultaat</strong></div>
+</div>
+```
+
+- `--n` is het aantal nodes in de rij.
+- Tussen twee rijen ontstaat vanzelf een splitsing of samenvoeging.
+- `class="graph-row lanes"` laat elke kolom 1-op-1 doorlopen naar de volgende rij.
+- `node out` geeft het eindresultaat een gevulde kleur.
+
+## Domein
+
+`frankautomatiseert.nl` is geregistreerd bij Hostnet. Het bestand `CNAME` vertelt GitHub Pages welk domein bij deze repo hoort; niet verwijderen.
+
+DNS-records bij Hostnet:
+
+| Type | Naam | Waarde |
+|---|---|---|
+| A (4x) | frankautomatiseert.nl | 185.199.108.153, .109.153, .110.153, .111.153 |
+| AAAA (4x) | frankautomatiseert.nl | 2606:50c0:8000::153 t/m 2606:50c0:8003::153 |
+| CNAME | www.frankautomatiseert.nl | fvmf.github.io |
+| TXT | _github-pages-challenge-FVMF.frankautomatiseert.nl | verificatiecode van GitHub |
+| TXT | frankautomatiseert.nl | `v=spf1 -all` (geen e-mail op dit domein) |
+| TXT | _dmarc.frankautomatiseert.nl | `v=DMARC1; p=reject` |
 
 ## Alles is openbaar
 
-Een GitHub Pages-repo op een gratis account is publiek, inclusief dit bestand. Zet er geen adres, telefoonnummer, geboortedatum, namen van collega's, interne URL's of ID's in.
+Deze repo is publiek, inclusief dit bestand. Zet er geen adres, telefoonnummer, volledige geboortedatum, namen van collega's, interne URL's of ID's in.
