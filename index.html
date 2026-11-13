@@ -3,37 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#10161C">
   <title>Frank Verberne | Automation engineer</title>
   <meta name="description" content="Portfolio van Frank Verberne: van gedragswetenschapper en productmanager naar automation engineer. Cases met architectuur, lessen en resultaat.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
   <style>
-    /* ---------- Tokens ---------- */
+    /* ---------- Tokens (alleen donker, ongeacht de instelling van het apparaat) ---------- */
     :root {
-      --paper: #F4F6F5;
-      --ink: #18212B;
-      --muted: #5D6873;
-      --track: #2E6B5B;
-      --signal: #D9971A;
-      --rule: #D3D9D6;
-      --node-bg: #FFFFFF;
-      --lesson-bg: #FBF4E6;
+      color-scheme: dark;        /* ook formulieren, scrollbars en de achtergrond bij overscroll donker */
+      --paper: #10161C;
+      --ink: #E5EAEE;
+      --muted: #9AA5AF;
+      --track: #62B49C;
+      --signal: #F0B23E;
+      --rule: #2A333C;
+      --node-bg: #182029;
+      --lesson-bg: #221D12;
       --display: "Bricolage Grotesque", system-ui, sans-serif;
       --text: "Instrument Sans", system-ui, sans-serif;
       --measure: 68ch;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --paper: #10161C;
-        --ink: #E5EAEE;
-        --muted: #9AA5AF;
-        --track: #62B49C;
-        --signal: #F0B23E;
-        --rule: #2A333C;
-        --node-bg: #182029;
-        --lesson-bg: #221D12;
-      }
     }
 
     /* ---------- Basis ---------- */
