@@ -334,32 +334,31 @@
         </div>
         <div class="case-body">
           <h4>Probleem</h4>
-          <p>Elke maand moesten reiskosten, thuiswerkdagen, verlof en ziekte per medewerker in de loonstroken komen. De gegevens zaten verspreid over NS Zakelijk, Employes en spreadsheets. En NS heeft geen API.</p>
+          <p>Elke maand reiskosten, mobiliteitsbudget, thuiswerkdagen, verlof en ziekte per medewerker handmatig in de loonstroken zetten. Tijdsinvestering: 1 uur per medewerker! De gegevens zaten namelijk verspreid over NS Zakelijk, Employes en Google Sheets. En NS heeft geen API.</p>
           <h4>Wat ik bouwde</h4>
           <figure class="graph" role="img" aria-label="Schema: NS-reisdata via een Python-app, woon-werkdeclaraties via een tweede app en verlof en ziekte uit Employes komen samen in Apps Script. Make.com zet daarna de conceptloonstroken klaar in Employes.">
-            <div class="graph-row" style="--n:3">
-              <div class="node"><strong>NS&#8209;reisdata</strong><span>Python-app en Drive</span></div>
-              <div class="node"><strong>Woon-werk</strong><span>eigen declaratie-app</span></div>
-              <div class="node"><strong>Verlof en ziekte</strong><span>uit Employes</span></div>
+            <div class="graph-row" style="--n:2">
+              <div class="node"><strong>NS&#8209;reiskosten</strong><span>Custom Python-app en Google Drive</span></div>
+              <div class="node"><strong>Employes</strong><span>Mobiliteitsbudget, reguliere werkdagen, verlof en ziekte</span></div>
             </div>
             <div class="graph-row">
-              <div class="node"><strong>Apps Script</strong><span>reiskosten, thuiswerkdagen, mobiliteitsbudget</span></div>
+              <div class="node"><strong>Apps Script</strong><span>Verwerken reiskosten, thuiswerkdagen, mobiliteitsbudget</span></div>
             </div>
             <div class="graph-row">
               <div class="node"><strong>Make.com</strong><span>regisseert en zet klaar</span></div>
             </div>
             <div class="graph-row">
-              <div class="node out"><strong>Conceptloonstroken</strong><span>in Employes, alleen nog goedkeuren</span></div>
+              <div class="node out"><strong>Employes</strong><span>conceptloonstroken voor iedere medewerker, alleen nog goedkeuren</span></div>
             </div>
           </figure>
-          <p>Een Python-desktopapp logt in op NS Zakelijk, downloadt per abonnement de reistransacties en zet ze in Google Drive. Een tweede app dient woon-werkdeclaraties voor meerdere dagen tegelijk in bij Employes. Make.com regisseert de rest: het haalt medewerkers, verlof en ziekte uit Employes en roept mijn Apps Script aan. Dat script maakt een tabblad voor elke nieuwe medewerker, koppelt NS-kosten via het kaartnummer aan de juiste persoon en rekent reiskosten, thuiswerkdagen en het resterende mobiliteitsbudget uit. Daarna zet Make de conceptloonstroken klaar in Employes.</p>
+          <p>Een custom Python-desktopapp logt in op NS Zakelijk, downloadt per medewerker de reistransacties en zet ze in Google Drive. Make.com regisseert de rest: het verwerkt deze reistransacties in een Google Sheet, haalt medewerkers informatie, mobiliteitsbudget, verlof en ziekte uit Employes en roept Google Apps Script aan. Dat script maakt een tabblad voor elke nieuwe medewerker, koppelt NS-kosten via het kaartnummer aan de juiste persoon en rekent reiskosten, thuiswerkdagen en het resterende mobiliteitsbudget uit. Daarna zet Make.com de conceptloonstroken klaar in Employes.</p>
           <div class="lesson">
             <h4>Wat ik leerde</h4>
-            <p>Kalenders zijn lastiger dan ze lijken. De feestdagen komen uit een publieke Google-agenda, maar niet elke feestdag is een vrije dag: Goede Vrijdag en Bevrijdingsdag moest ik uitzonderen. Declaraties komen soms laat binnen, dus het script wacht per bron een paar dagen en stempelt verwerkte dagen met de maand. Zo telt niets dubbel.</p>
-            <p>En waar een mens nodig is, laat ik een mens het doen. Vraagt NS om een CAPTCHA, dan wacht de app tot iemand hem oplost.</p>
+            <p>De feestdagen komen uit een publieke Google-agenda, maar niet elke feestdag is een vrije dag: Goede Vrijdag en Bevrijdingsdag moest ik uitzonderen. Declaraties komen soms laat binnen, dus het script wacht per bron een paar dagen en stempelt verwerkte dagen met de maand. Zo telt niets dubbel.</p>
+            <p>En een mens inschakelen waar het nodig is. Vraagt NS om een CAPTCHA, dan wacht de app tot iemand hem oplost. En voor de zekerheid controleer ik elke maand 1 willekeurige medewerker controleren.</p>
           </div>
           <h4>Resultaat</h4>
-          <p class="result">De conceptloonstroken staan elke maand klaar in Employes en hoeven alleen nog goedgekeurd te worden. Ook de jaarovergang gaat vanzelf: back-up, nieuw jaar, nieuwe feestdagen.</p>
+          <p class="result">De conceptloonstroken staan elke maand klaar in Employes en hoeven alleen nog goedgekeurd te worden. Tijdsinvestering: 20 min met 1 controlecheck, ongeacht hoeveel medewerkers! Ook de jaarovergang gaat vanzelf: back-up, nieuw jaar, nieuwe feestdagen.</p>
         </div>
       </article>
 
