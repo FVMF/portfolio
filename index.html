@@ -325,36 +325,6 @@
         <h2 id="cases-title">Professioneel werk</h2>
         <p>Gebouwd in mijn werk als Business Process Automation Engineer, sinds eind 2024.</p>
       </div>
-      <article class="case" id="verjaardag" aria-labelledby="verjaardag-title">
-        <div class="case-meta">
-          <p class="when">2024</p>
-          <h3 id="verjaardag-title">Verjaardagsreminder</h3>
-          <p class="stack">Make.com, Notion API, Slack API</p>
-        </div>
-        <div class="case-body">
-          <h4>Probleem</h4>
-          <p>Wanneer een medewerker jarig is, moet er natuurlijk tijdig een cadeautje geregeld worden. Management vond dit dusdanig belangrijk dat dit niet vergeten moet worden. </p>
-          <h4>Wat ik bouwde</h4>
-          <figure class="graph" role="img" aria-label="Schema: Notion voedt twee scripts. De contactreminder stuurt elke werkdag een Slack-DM of Notion-taak, de verjaardagsreminder elke ochtend een Slack-bericht.">
-            <div class="graph-row">
-              <div class="node"><strong>Notion</strong><span>geboortedatum van alle medewerkers</span></div>
-            </div>
-            <div class="graph-row lanes"">
-              <div class="node"><strong>Make.com verjaardagscheck</strong><span>elke ochtend: iemand over 2 weken of vandaag jarig?</span></div>
-            </div>
-            <div class="graph-row">
-              <div class="node out"><strong>Slack-bericht</strong><span>2 weken van tevoren reminder en op de dag zelf felicitatiebericht</span></div>
-            </div>
-          </figure>
-          <p>De verjaardagsreminder houdt rekening met 29 februari, en met meerdere mensen die op dezelfde dag jarig zijn. Wie zijn leeftijd liever niet deelt in het felicitatiebericht, kan dat simpel met 1 vinkje uitzetten.</p>
-          <div class="lesson">
-            <h4>Wat ik leerde</h4>
-            <p>Werken met datums in Make.com was vrij omslachtig, dus om efficiënter om te gaan met het credit verbruik van Make.com was het slimmer om 1 keer een Google Apps Script aan te roepen en het resultaat te verwerken. Meer flexibiliteit met minder kosten.</p>
-          </div>
-          <h4>Resultaat</h4>
-          <p class="result">Elke verjaardag wordt nu 2 weken van tevoren aangekondigd zodat er tijdig een gepast cadeautje gekocht wordt. Op de dag zelf wordt de jarige gefeliciteerd, met eventueel de bereikte leeftijd.</p>
-        </div>
-      </article>
       <article class="case" id="verloning" aria-labelledby="verloning-title">
         <div class="case-meta">
           <p class="when">2025</p>
@@ -385,6 +355,73 @@
           </div>
           <h4>Resultaat</h4>
           <p class="result">De conceptloonstroken staan elke maand klaar in Employes en hoeven alleen nog goedgekeurd te worden. Tijdsinvestering: 20 min met 1 controlecheck, ongeacht hoeveel medewerkers. Ook de jaarovergang gaat vanzelf: back-up, nieuw jaar, nieuwe feestdagen.</p>
+        </div>
+      </article>
+
+      <article class="case" id="contactopvolging" aria-labelledby="contactopvolging-title">
+        <div class="case-meta">
+          <p class="when">2025</p>
+          <h3 id="contactopvolging-title">Contactopvolging</h3>
+          <p class="stack">Make.com, Notion API, Slack API</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Informatie rondom contacten met potentiële klanten staat in Notion, maar de concrete opvolging liet soms te lang op zich wachten. Gevolg: mogelijke klanten die geen klanten werden.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: Notion voedt twee scripts. De contactreminder stuurt elke werkdag een Slack-DM of Notion-taak, de verjaardagsreminder elke ochtend een Slack-bericht.">
+            <div class="graph-row">
+              <div class="node"><strong>Notion</strong><span>informatie rondom contacten</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Make.com contactreminder</strong><span>elke werkdag</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node out"><strong>Slack-DM of Notion-taak</strong><span>per contacteigenaar</span></div>
+            </div>
+          </figure>
+          <p>Elke werkdag haal ik uit de contacten database de relevante informatie (laatst contactmoment, gepland contactmoment, contact eigenaren) om op de dag zelf een melding te maken dat het tijd is om een persoon te contacteren. Daarnaast kregen contacteigenaren elke maandag een overzicht van mensen waarvan het geplande contactmoment in het verleden lag, zodat er alsnog contact kon worden opgenomen. 
+          </p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>Niet iedereen heeft dezelfde behoefte, dus er was flexibiliteit nodig in de vorm van herinnering. Voor de meeste mensen werkte een Slack DM prima, maar een andere collega wilde liever een taak in Notion om af te werken. Dus die flexibiliteit bouwde ik in.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">Contacteigenaren krijgen elke maandag via Slack een DM met een overzicht van de mensen om die week te contacteren. Wanneer gewenst, wordt er automatisch een Notion taak aangemaakt voor het contactmoment.</p>
+        </div>
+      </article>
+
+      <article class="case" id="moneybird" aria-labelledby="moneybird-title">
+        <div class="case-meta">
+          <p class="when">2026</p>
+          <h3 id="moneybird-title">Uren uit Moneybird, direct in Notion</h3>
+          <p class="stack">Python, Docker, Kubernetes, Helm, Moneybird-webhooks, Notion API</p>
+        </div>
+        <div class="case-body">
+          <h4>Probleem</h4>
+          <p>Urenregistraties en de status van facturen uit Moneybird moeten in de urendatabase in Notion staan. Dat deden twee Make.com-scenario's.</p>
+          <h4>Wat ik bouwde</h4>
+          <figure class="graph" role="img" aria-label="Schema: Moneybird stuurt bij elke wijziging een webhook en een nachtelijke sync vangt gemiste wijzigingen op. Beide komen samen in een idempotente verwerking die de urendatabase in Notion bijwerkt.">
+            <div class="graph-row">
+              <div class="node"><strong>Moneybird</strong><span>uren en facturen</span></div>
+            </div>
+            <div class="graph-row" style="--n:2">
+              <div class="node"><strong>Webhook</strong><span>direct, met HMAC-check</span></div>
+              <div class="node"><strong>Nachtelijke sync</strong><span>vangnet: laatste 7 dagen</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node"><strong>Idempotente verwerking</strong><span>dubbel verwerken kan geen kwaad</span></div>
+            </div>
+            <div class="graph-row">
+              <div class="node out"><strong>Urendatabase in Notion</strong></div>
+            </div>
+          </figure>
+          <p>Een kleine Python-service ontvangt de webhooks, controleert de HMAC-handtekening (met een venster van vijf minuten tegen replay) en werkt Notion bij. Elke nacht haalt een sync de laatste zeven dagen opnieuw op, voor het geval er een webhook gemist is. De service draait als container op Kubernetes. Alleen het webhookpad is van buitenaf bereikbaar.</p>
+          <div class="lesson">
+            <h4>Wat ik leerde</h4>
+            <p>Het eerste ontwerp had een eigen database om dubbele berichten te herkennen. Ik koos voor iets eenvoudigers: elke verwerking is idempotent, dus een bericht twee keer verwerken geeft hetzelfde resultaat. De nachtelijke sync vangt de rest op. Minder onderdelen betekent minder dat stuk kan gaan.</p>
+          </div>
+          <h4>Resultaat</h4>
+          <p class="result">Uren die geboekt worden in Moneybird komen direct in de Notion urendatabase terecht, zodat deze cijfers correct en actueel zijn.</p>
         </div>
       </article>
 
@@ -424,35 +461,35 @@
         </div>
       </article>
 
-      <article class="case" id="contactopvolging" aria-labelledby="contactopvolging-title">
+      <article class="case" id="contacten" aria-labelledby="contacten-title">
         <div class="case-meta">
-          <p class="when">2025</p>
-          <h3 id="contactopvolging-title">Contactopvolging</h3>
-          <p class="stack">Make.com, Notion API, Slack API</p>
+          <p class="when">2026</p>
+          <h3 id="contacten-title">Contacten die niet heen en weer blijven stuiteren</h3>
+          <p class="stack">TypeScript, Fastify, Google People API, Notion API, vitest, Docker</p>
         </div>
         <div class="case-body">
           <h4>Probleem</h4>
-          <p>Informatie rondom contacten met potentiële klanten staat in Notion, maar de concrete opvolging liet soms te lang op zich wachten. Gevolg: mogelijke klanten die geen klanten werden.</p>
+          <p>Het team houdt contacten bij in een CRM in Notion, maar wil ze ook op de telefoon en in Gmail hebben. Synchroniseren in twee richtingen klinkt simpel, tot twee systemen elkaars wijzigingen eindeloos terugschrijven.</p>
           <h4>Wat ik bouwde</h4>
-          <figure class="graph" role="img" aria-label="Schema: Notion voedt twee scripts. De contactreminder stuurt elke werkdag een Slack-DM of Notion-taak, de verjaardagsreminder elke ochtend een Slack-bericht.">
+          <figure class="graph" role="img" aria-label="Schema: teamleden kiezen contacten in het CRM in Notion. De sync vergelijkt per contact met een baseline en schrijft alleen echte wijzigingen, beide kanten op, naar Google Contacts, met een rapport in Slack.">
             <div class="graph-row">
-              <div class="node"><strong>Notion</strong><span>informatie rondom contacten</span></div>
+              <div class="node"><strong>CRM in Notion</strong><span>opt-in per teamlid</span></div>
             </div>
             <div class="graph-row">
-              <div class="node"><strong>Make.com contactreminder</strong><span>elke werkdag</span></div>
+              <div class="node"><strong>Vergelijking met baseline</strong><span>per contact, per veld, beide kanten op</span></div>
             </div>
-            <div class="graph-row">
-              <div class="node out"><strong>Slack-DM of Notion-taak</strong><span>per contacteigenaar</span></div>
+            <div class="graph-row" style="--n:2">
+              <div class="node out"><strong>Google Contacts</strong><span>alleen echte wijzigingen</span></div>
+              <div class="node out"><strong>Rapport in Slack</strong><span>wat er veranderde</span></div>
             </div>
           </figure>
-          <p>Elke werkdag haal ik uit de contacten database de relevante informatie (laatst contactmoment, gepland contactmoment, contact eigenaren) om op de dag zelf een melding te maken dat het tijd is om een persoon te contacteren. Daarnaast kregen contacteigenaren elke maandag een overzicht van mensen waarvan het geplande contactmoment in het verleden lag, zodat er alsnog contact kon worden opgenomen. 
-          </p>
+          <p>Teamleden kiezen in Notion welke contacten ze willen hebben. Per contact vergelijkt de sync Notion en alle Google-kopieën met een opgeslagen baseline, en schrijft alleen de velden die echt veranderd zijn. Telefoonnummers worden genormaliseerd, zodat '06-' en '+31 6' niet als wijziging tellen.</p>
           <div class="lesson">
             <h4>Wat ik leerde</h4>
-            <p>Niet iedereen heeft dezelfde behoefte, dus er was flexibiliteit nodig in de vorm van herinnering. Voor de meeste mensen werkte een Slack DM prima, maar een andere collega wilde liever een taak in Notion om af te werken. Dus die flexibiliteit bouwde ik in.</p>
+            <p>De eerste versie schreef bij elke run zes wijzigingen per gebruiker die er niet waren: echo's van zijn eigen schrijfacties. Ik bouwde de engine om naar een vergelijking per contact, en een integratietest bewijst nu dat een run zonder wijzigingen niets schrijft. Een geplande droogloop faalt bovendien bewust, want een groene run die niets doet, is een stille fout.</p>
           </div>
           <h4>Resultaat</h4>
-          <p class="result">Contacteigenaren krijgen elke maandag via Slack een DM met een overzicht van de mensen om die week te contacteren. Wanneer gewenst, wordt er automatisch een Notion taak aangemaakt voor het contactmoment.</p>
+          <p class="result">Wanneer iemand daarvoor kiest, worden contacten op de telefoon automatisch gesynced met die in Notion (en vice versa). </p>
         </div>
       </article>
 
@@ -493,70 +530,34 @@
         </div>
       </article>
 
-      <article class="case" id="moneybird" aria-labelledby="moneybird-title">
+      <article class="case" id="verjaardag" aria-labelledby="verjaardag-title">
         <div class="case-meta">
-          <p class="when">2026, in aanbouw</p>
-          <h3 id="moneybird-title">Uren uit Moneybird, direct in Notion</h3>
-          <p class="stack">Python, Docker, Kubernetes, Helm, Moneybird-webhooks, Notion API</p>
+          <p class="when">2024</p>
+          <h3 id="verjaardag-title">Verjaardagsreminder</h3>
+          <p class="stack">Make.com, Notion API, Slack API</p>
         </div>
         <div class="case-body">
           <h4>Probleem</h4>
-          <p>Urenregistraties en de status van facturen uit Moneybird moeten in de urendatabase in Notion staan. Dat deden twee Make.com-scenario's.</p>
+          <p>Wanneer een medewerker jarig is, moet er natuurlijk tijdig een cadeautje geregeld worden. Management vond dit dusdanig belangrijk dat dit niet vergeten moet worden. </p>
           <h4>Wat ik bouwde</h4>
-          <figure class="graph" role="img" aria-label="Schema: Moneybird stuurt bij elke wijziging een webhook en een nachtelijke sync vangt gemiste wijzigingen op. Beide komen samen in een idempotente verwerking die de urendatabase in Notion bijwerkt.">
+          <figure class="graph" role="img" aria-label="Schema: Notion voedt twee scripts. De contactreminder stuurt elke werkdag een Slack-DM of Notion-taak, de verjaardagsreminder elke ochtend een Slack-bericht.">
             <div class="graph-row">
-              <div class="node"><strong>Moneybird</strong><span>uren en facturen</span></div>
+              <div class="node"><strong>Notion</strong><span>geboortedatum van alle medewerkers</span></div>
             </div>
-            <div class="graph-row" style="--n:2">
-              <div class="node"><strong>Webhook</strong><span>direct, met HMAC-check</span></div>
-              <div class="node"><strong>Nachtelijke sync</strong><span>vangnet: laatste 7 dagen</span></div>
-            </div>
-            <div class="graph-row">
-              <div class="node"><strong>Idempotente verwerking</strong><span>dubbel verwerken kan geen kwaad</span></div>
+            <div class="graph-row lanes"">
+              <div class="node"><strong>Make.com verjaardagscheck</strong><span>elke ochtend: iemand over 2 weken of vandaag jarig?</span></div>
             </div>
             <div class="graph-row">
-              <div class="node out"><strong>Urendatabase in Notion</strong></div>
+              <div class="node out"><strong>Slack-bericht</strong><span>2 weken van tevoren reminder en op de dag zelf felicitatiebericht</span></div>
             </div>
           </figure>
-          <p>Een kleine Python-service ontvangt de webhooks, controleert de HMAC-handtekening (met een venster van vijf minuten tegen replay) en werkt Notion bij. Elke nacht haalt een sync de laatste zeven dagen opnieuw op, voor het geval er een webhook gemist is. De service draait als container op Kubernetes. Alleen het webhookpad is van buitenaf bereikbaar.</p>
+          <p>De verjaardagsreminder houdt rekening met 29 februari, en met meerdere mensen die op dezelfde dag jarig zijn. Wie zijn leeftijd liever niet deelt in het felicitatiebericht, kan dat simpel met 1 vinkje uitzetten.</p>
           <div class="lesson">
             <h4>Wat ik leerde</h4>
-            <p>Het eerste ontwerp had een eigen database om dubbele berichten te herkennen. Ik koos voor iets eenvoudigers: elke verwerking is idempotent, dus een bericht twee keer verwerken geeft hetzelfde resultaat. De nachtelijke sync vangt de rest op. Minder onderdelen betekent minder dat stuk kan gaan.</p>
+            <p>Werken met datums in Make.com was vrij omslachtig, dus om efficiënter om te gaan met het credit verbruik van Make.com was het slimmer om 1 keer een Google Apps Script aan te roepen en het resultaat te verwerken. Meer flexibiliteit met minder kosten.</p>
           </div>
           <h4>Resultaat</h4>
-          <p class="result">Uren die geboekt worden in Moneybird komen direct in de Notion urendatabase terecht, zodat deze cijfers correct en actueel zijn.</p>
-        </div>
-      </article>
-
-      <article class="case" id="contacten" aria-labelledby="contacten-title">
-        <div class="case-meta">
-          <p class="when">2026, in aanbouw</p>
-          <h3 id="contacten-title">Contacten die niet heen en weer blijven stuiteren</h3>
-          <p class="stack">TypeScript, Fastify, Google People API, Notion API, vitest, Docker</p>
-        </div>
-        <div class="case-body">
-          <h4>Probleem</h4>
-          <p>Het team houdt contacten bij in een CRM in Notion, maar wil ze ook op de telefoon en in Gmail hebben. Synchroniseren in twee richtingen klinkt simpel, tot twee systemen elkaars wijzigingen eindeloos terugschrijven.</p>
-          <h4>Wat ik bouwde</h4>
-          <figure class="graph" role="img" aria-label="Schema: teamleden kiezen contacten in het CRM in Notion. De sync vergelijkt per contact met een baseline en schrijft alleen echte wijzigingen, beide kanten op, naar Google Contacts, met een rapport in Slack.">
-            <div class="graph-row">
-              <div class="node"><strong>CRM in Notion</strong><span>opt-in per teamlid</span></div>
-            </div>
-            <div class="graph-row">
-              <div class="node"><strong>Vergelijking met baseline</strong><span>per contact, per veld, beide kanten op</span></div>
-            </div>
-            <div class="graph-row" style="--n:2">
-              <div class="node out"><strong>Google Contacts</strong><span>alleen echte wijzigingen</span></div>
-              <div class="node out"><strong>Rapport in Slack</strong><span>wat er veranderde</span></div>
-            </div>
-          </figure>
-          <p>Teamleden kiezen in Notion welke contacten ze willen hebben. Per contact vergelijkt de sync Notion en alle Google-kopieën met een opgeslagen baseline, en schrijft alleen de velden die echt veranderd zijn. Telefoonnummers worden genormaliseerd, zodat '06-' en '+31 6' niet als wijziging tellen.</p>
-          <div class="lesson">
-            <h4>Wat ik leerde</h4>
-            <p>De eerste versie schreef bij elke run zes wijzigingen per gebruiker die er niet waren: echo's van zijn eigen schrijfacties. Ik bouwde de engine om naar een vergelijking per contact, en een integratietest bewijst nu dat een run zonder wijzigingen niets schrijft. Een geplande droogloop faalt bovendien bewust, want een groene run die niets doet, is een stille fout.</p>
-          </div>
-          <h4>Resultaat</h4>
-          <p class="result">Wanneer iemand daarvoor kiest, worden contacten op de telefoon automatisch gesynced met die in Notion (en vice versa). </p>
+          <p class="result">Elke verjaardag wordt nu 2 weken van tevoren aangekondigd zodat er tijdig een gepast cadeautje gekocht wordt. Op de dag zelf wordt de jarige gefeliciteerd, met eventueel de bereikte leeftijd.</p>
         </div>
       </article>
     </section>
